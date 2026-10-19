@@ -1,7 +1,13 @@
-from app import welcome
+from app import app
 
-def test_welcome():
-    assert welcome("Jenkins") == "Hello, Jenkins!"
+def test_home():
+    client = app.test_client()
+    response = client.get("/")
+    assert response.status_code == 200
 
-def test_empty_name():
-    assert welcome("") == "Hello, !"
+def test_health():
+    client = app.test_client()
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json["status"] == "UP"
