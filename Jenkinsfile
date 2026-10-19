@@ -10,26 +10,26 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'python3 -m pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv .venv
+                    .venv/bin/pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'python3 -m pytest -v'
+                sh '.venv/bin/python -m pytest -v'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Health Check Application: TESTS PASSED'
         }
         failure {
-            echo 'Pipeline failed. Check the console output.'
-        }
-        always {
-            echo 'Jenkins pipeline execution finished.'
+            echo 'Health Check Application: TESTS FAILED'
         }
     }
 }
