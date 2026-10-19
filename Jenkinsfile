@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -10,16 +11,16 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                    python3 -m venv .venv
-                    .venv/bin/pip install -r requirements.txt
-                '''
+                bat 'python --version'
+                bat 'python -m venv .venv'
+                bat '.venv\\Scripts\\python.exe -m pip install --upgrade pip'
+                bat '.venv\\Scripts\\python.exe -m pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh '.venv/bin/python -m pytest -v'
+                bat '.venv\\Scripts\\python.exe -m pytest -v'
             }
         }
     }
