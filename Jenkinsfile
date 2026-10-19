@@ -1,36 +1,28 @@
-
 pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                bat 'python --version'
-                bat 'python -m venv .venv'
-                bat '.venv\\Scripts\\python.exe -m pip install --upgrade pip'
-                bat '.venv\\Scripts\\python.exe -m pip install -r requirements.txt'
+                sh 'python3 -m venv .venv'
+                sh '.venv/bin/python -m pip install --upgrade pip'
+                sh '.venv/bin/python -m pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat '.venv\\Scripts\\python.exe -m pytest -v'
+                sh '.venv/bin/python -m pytest -v'
             }
         }
     }
 
     post {
         success {
-            echo 'Health Check Application: TESTS PASSED'
+            echo 'All tests passed!'
         }
         failure {
-            echo 'Health Check Application: TESTS FAILED'
+            echo 'Pipeline failed. Check the console output.'
         }
     }
 }
